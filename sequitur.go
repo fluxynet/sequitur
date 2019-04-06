@@ -13,7 +13,7 @@ type Sequence struct {
 type Action func() error
 
 //Consequence is the result of a sequence
-type Consequence func(error)
+type Consequence func(string, error)
 
 //Do executes an action as part of a sequence
 func (s Sequence) Do(name string, action Action) Sequence {
@@ -28,7 +28,7 @@ func (s Sequence) Do(name string, action Action) Sequence {
 //Catch executes a consequence if an error has occurred as part of a sequence
 func (s Sequence) Catch(consequence Consequence) Sequence {
 	if s.Error != nil {
-		consequence(s.Error)
+		consequence(s.LastAction, s.Error)
 	}
 
 	return s
