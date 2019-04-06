@@ -1,2 +1,3 @@
 # sequitur
-Golang Monad implementation for error handling in sequences of actions
+
+Golang error handling in sequences of actions
