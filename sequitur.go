@@ -29,6 +29,7 @@ func (s Sequence) Do(name string, action Action) Sequence {
 func (s Sequence) Catch(consequence Consequence) Sequence {
 	if s.Error != nil {
 		consequence(s.LastAction, s.Error)
+		s.Error = nil
 	}
 
 	return s
