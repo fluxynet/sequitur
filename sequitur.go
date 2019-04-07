@@ -16,7 +16,7 @@ type Action func() error
 type Consequence func(string, error)
 
 //Do executes an action as part of a sequence
-func (s Sequence) Do(name string, action Action) Sequence {
+func (s *Sequence) Do(name string, action Action) *Sequence {
 	if s.Error == nil {
 		s.LastAction = name
 		s.Error = action()
@@ -26,7 +26,7 @@ func (s Sequence) Do(name string, action Action) Sequence {
 }
 
 //Catch executes a consequence if an error has occurred as part of a sequence
-func (s Sequence) Catch(consequence Consequence) Sequence {
+func (s *Sequence) Catch(consequence Consequence) *Sequence {
 	if s.Error != nil {
 		consequence(s.LastAction, s.Error)
 		s.Error = nil
@@ -36,7 +36,7 @@ func (s Sequence) Catch(consequence Consequence) Sequence {
 }
 
 //Then executes a function if no error has occurred
-func (s Sequence) Then(then func()) Sequence {
+func (s *Sequence) Then(then func()) *Sequence {
 	if s.Error == nil {
 		then()
 	}
