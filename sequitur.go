@@ -26,6 +26,12 @@ type Sequence interface {
 
 	//Then proceeds to execute a function once a sequence is marked as success
 	Then(then func()) Sequence
+
+	//Error returns the error, if any
+	Error() error
+
+	//LastAction returns the last executed action including the one that caused the error, if any
+	LastAction() string
 }
 
 //unpanic is used for panic recovery without requiring it to be added to each Sequence implementation
