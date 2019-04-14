@@ -9,9 +9,10 @@ import (
 
 func TestLinearSequence_recover(t *testing.T) {
 	var (
-		seq    = sequitur.Linear()
-		result string
-		gotErr error
+		seq     = sequitur.Linear()
+		result  string
+		gotErr  error
+		gotName string
 	)
 
 	seq.Do("letter a", func() error {
@@ -23,13 +24,22 @@ func TestLinearSequence_recover(t *testing.T) {
 		panic("foobar")
 	})
 
-	seq.Catch(func(name string, err error) {
-		gotErr = err
-		result = name
+	seq.Do("letter b", func() error {
+		result += "b"
+		return nil
 	})
 
-	if result != "misbehave" {
-		t.Errorf(`expected name="misbehave", obtained="%s"`, result)
+	seq.Catch(func(name string, err error) {
+		gotErr = err
+		gotName = name
+	})
+
+	if result != "a" {
+		t.Errorf(`expected result="a", obtained="%s"`, result)
+	}
+
+	if gotName != "misbehave" {
+		t.Errorf(`expected name="misbehave", obtained="%s"`, gotName)
 	}
 
 	if gotErr != sequitur.ErrorPanic {
@@ -42,12 +52,6 @@ func TestLinearSequence_DoThen(t *testing.T) {
 		seq    = sequitur.Linear()
 		result string
 	)
-
-	defer func() {
-		if result != "abcd" {
-			t.Errorf(`expected "abcd", obtained="%s"\n`, result)
-		}
-	}()
 
 	seq.Do("letter a", func() error {
 		result += "a"
@@ -71,12 +75,21 @@ func TestLinearSequence_DoThen(t *testing.T) {
 	seq.Then(func() {
 		result += "d"
 	})
+
+	seq.Then(func() {
+		result += "z"
+	})
+
+	if result != "abcd" {
+		t.Errorf(`expected "abcd", obtained="%s"\n`, result)
+	}
 }
 
 func TestLinearSequence_DoCatch(t *testing.T) {
 	var (
 		seq     = sequitur.Linear()
 		result  string
+		nameGot string
 		errGot  error
 		errWant = errors.New("error")
 	)
@@ -97,7 +110,7 @@ func TestLinearSequence_DoCatch(t *testing.T) {
 	})
 
 	seq.Catch(func(name string, err error) {
-		result = name
+		nameGot = name
 		errGot = err
 	})
 
@@ -105,8 +118,12 @@ func TestLinearSequence_DoCatch(t *testing.T) {
 		result += "d"
 	})
 
-	if result != "letter b" {
-		t.Errorf(`expected name="letter b", obtained="%s"\n`, result)
+	if result != "ab" {
+		t.Errorf(`expected result="ab", obtained="%s"\n`, result)
+	}
+
+	if nameGot != "letter b" {
+		t.Errorf(`expected name="letter b", obtained="%s"\n`, nameGot)
 	}
 
 	if errGot != errWant {

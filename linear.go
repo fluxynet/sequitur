@@ -17,18 +17,18 @@ func Linear() *LinearSequence {
 	return &LinearSequence{pending: true}
 }
 
-func (s *LinearSequence) recover() {
-	if r := recover(); r != nil {
-		s.Error = ErrorPanic
-	}
+func (s *LinearSequence) save(name string, err error) {
+	s.LastAction = name
+	s.Error = err
 }
 
 //Do executes an action as part of a sequence
 func (s *LinearSequence) Do(name string, action Action) Sequence {
 	if s.pending && s.Error == nil {
-		s.LastAction = name
-		defer s.recover()
-		s.Error = action()
+		var err error
+		defer unpanic(name, s)
+		defer s.save(name, err)
+		err = action()
 	}
 
 	return s
