@@ -40,3 +40,4 @@ func unpanic(name string, s Sequence) {
 		s.save(name, ErrorPanic)
 	}
 }
+
