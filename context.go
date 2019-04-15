@@ -19,11 +19,13 @@ func WithContext(ctx context.Context, s Sequence) Sequence {
 
 //Do wraps the normal Do with a context check
 func (s *sequenceWithContext) Do(name string, action Action) Sequence {
-	select {
-	case <-s.Ctx.Done():
-		s.save(name, s.Ctx.Err())
-	default:
-		s.Sequence.Do(name, action)
+	if s.Error() == nil {
+		select {
+		case <-s.Ctx.Done():
+			s.save(name, s.Ctx.Err())
+		default:
+			s.Sequence.Do(name, action)
+		}
 	}
 
 	return s

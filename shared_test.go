@@ -3,6 +3,7 @@ package sequitur_test
 import (
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/fluxynet/sequitur"
 )
@@ -79,6 +80,40 @@ func test_then(seq sequitur.Sequence, t *testing.T) string {
 	var result string
 
 	seq.Do("letter a", func() error {
+		result += "a"
+		return nil
+	})
+
+	seq.Do("letter b", func() error {
+		result += "b"
+		return nil
+	})
+
+	seq.Do("letter c", func() error {
+		result += "c"
+		return nil
+	})
+
+	seq.Catch(func(name string, err error) {
+		result += "z"
+	})
+
+	seq.Then(func() {
+		result += "d"
+	})
+
+	seq.Then(func() {
+		result += "e"
+	})
+
+	return result
+}
+
+func test_then_delayed(seq sequitur.Sequence, t *testing.T) string {
+	var result string
+
+	seq.Do("letter a", func() error {
+		time.Sleep(time.Second * 10)
 		result += "a"
 		return nil
 	})
