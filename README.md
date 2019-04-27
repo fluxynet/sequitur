@@ -1,6 +1,24 @@
+![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)
+[![GoDoc](https://img.shields.io/badge/go-doc%20-blue.svg)](https://godoc.org/github.com/fluxynet/sequitur)
+
 # Sequitur
 
 Sequitur is a simple way of handling errors in Go.
+
+## Overview
+- [Sequitur](#sequitur)
+  * [Overview](#overview)
+  * [Features](#features)
+  * [Usage](#usage)
+  * [Examples](#examples)
+    + [Simple Sequence](#simple-sequence)
+  * [Error handling](#error-handling)
+  * [Deferred Error handling](#deferred-error-handling)
+    + [Panic handling](#panic-handling)
+    + [Context handling](#context-handling)
+    + [Logging with logrus](#logging-with-logrus)
+  * [Acknowledgements](#acknowledgements)
+
 
 ## Features
 
