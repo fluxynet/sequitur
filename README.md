@@ -14,6 +14,7 @@ Sequitur is a simple way of handling errors in Go.
     + [Simple Sequence](#simple-sequence)
     + [Error handling](#error-handling)
     + [Deferred Error handling](#deferred-error-handling)
+    + [Grouping errors](#grouping-errors)
     + [Panic handling](#panic-handling)
     + [Context handling](#context-handling)
     + [Logging with logrus](#logging-with-logrus)
@@ -22,11 +23,12 @@ Sequitur is a simple way of handling errors in Go.
 
 ## Features
 
--   Simple syntax, no more `if value, err = action(); err != nil {`.
--   Each action must have a description which makes for user-friendly error messages.
--   Automatic panic handling. If any `Action` panics, it is treated as an error of type `sequitur.ErrorPanic`.
--   Logging can be done fairly easily using Logrus (more mechanisms to be added).
--   Context handling. If context expires, sequence stops.
+- Simple syntax, no more `if value, err = action(); err != nil {`.
+- Each action must have a description which makes for user-friendly error messages.
+- Automatic panic handling. If any `Action` panics, it is treated as an error of type `sequitur.ErrorPanic`.
+- Logging can be done fairly easily using Logrus (more mechanisms to be added).
+- Context handling. If context expires, sequence stops.
+- Grouping of code into logical sequences
 
 ## Usage
 
@@ -239,6 +241,30 @@ func catchError(w http.ResponseWriter, r *http.Request) sequitur.Consequence {
 		w.Write([]byte(`{"error":"` + msg + `"}`))
 	}
 }
+```
+
+### Grouping errors
+
+```go
+var foo Foo
+
+seq := sequitur.Linear()
+
+//you can group logical operations together
+seq.Do("reading foo from file", func() error {
+    data, err := ioutil.ReadFile("foo.bar")
+    //it is still okay to use normal error handling
+    if err != nil {
+        return err
+    }
+
+    return json.Unmarshal(data, &foo)
+})
+
+
+seq.Do("processing foo", fooProcessingFunc)
+
+//...
 ```
 
 ### Panic handling
