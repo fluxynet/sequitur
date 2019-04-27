@@ -280,7 +280,7 @@ func main() {
         result += "c"
     })
 
-    fmt.Println(result) //abz
+    fmt.Println(result) //az
 }
 ```
 
