@@ -22,10 +22,10 @@ func WithLogrus(s Sequence, l ...*logrus.Logger) Sequence {
 
 	return &sequenceWithLogrusI{s, l[0]}
 }
-func (s sequenceWithLogrus) Do(name string, action Action) Sequence {
+func (s sequenceWithLogrus) Do(name string, action Action) {
 	if err := s.Sequence.Error(); err != nil {
 		logrus.Debug("skipping: " + name)
-		return s
+		return
 	}
 
 	logrus.Debug("starting: " + name)
@@ -36,14 +36,12 @@ func (s sequenceWithLogrus) Do(name string, action Action) Sequence {
 	} else {
 		logrus.WithError(err).Warn(name)
 	}
-
-	return s
 }
 
-func (s sequenceWithLogrusI) Do(name string, action Action) Sequence {
+func (s sequenceWithLogrusI) Do(name string, action Action) {
 	if err := s.Sequence.Error(); err != nil {
 		s.logger.Debug("skipping: " + name)
-		return s
+		return
 	}
 
 	s.logger.Debug("starting: " + name)
@@ -54,6 +52,4 @@ func (s sequenceWithLogrusI) Do(name string, action Action) Sequence {
 	} else {
 		s.logger.WithError(err).Warn(name)
 	}
-
-	return s
 }

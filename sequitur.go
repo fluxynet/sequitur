@@ -19,13 +19,13 @@ type Sequence interface {
 	save(name string, err error)
 
 	//Do executes an action as part of the sequence
-	Do(name string, action Action) Sequence
+	Do(name string, action Action)
 
 	//Catch handles the consequence of a failed sequence
-	Catch(consequence Consequence) Sequence
+	Catch(consequence Consequence)
 
 	//Then proceeds to execute a function once a sequence is marked as success
-	Then(then func()) Sequence
+	Then(then func())
 
 	//Error returns the error, if any
 	Error() error
@@ -40,4 +40,3 @@ func unpanic(name string, s Sequence) {
 		s.save(name, ErrorPanic)
 	}
 }
-

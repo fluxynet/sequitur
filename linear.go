@@ -33,7 +33,7 @@ func (s *LinearSequence) LastAction() string {
 }
 
 //Do executes an action as part of a sequence
-func (s *LinearSequence) Do(name string, action Action) Sequence {
+func (s *LinearSequence) Do(name string, action Action) {
 	if s.pending && s.err == nil {
 		var err error
 		defer unpanic(name, s)
@@ -42,26 +42,20 @@ func (s *LinearSequence) Do(name string, action Action) Sequence {
 		}()
 		err = action()
 	}
-
-	return s
 }
 
 //Catch executes a consequence if an error has occurred as part of a sequence
-func (s *LinearSequence) Catch(consequence Consequence) Sequence {
+func (s *LinearSequence) Catch(consequence Consequence) {
 	if s.pending && s.err != nil {
 		consequence(s.lastAction, s.err)
 		s.pending = false
 	}
-
-	return s
 }
 
 //Then executes a function if no error has occurred
-func (s *LinearSequence) Then(then func()) Sequence {
+func (s *LinearSequence) Then(then func()) {
 	if s.pending && s.err == nil {
 		then()
 		s.pending = false
 	}
-
-	return s
 }
