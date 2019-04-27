@@ -7,17 +7,17 @@ Sequitur is a simple way of handling errors in Go.
 
 ## Overview
 - [Sequitur](#sequitur)
-  * [Overview](#overview)
-  * [Features](#features)
-  * [Usage](#usage)
-  * [Examples](#examples)
+- [Overview](#overview)
+- [Features](#features)
+- [Usage](#usage)
+- [Examples](#examples)
     + [Simple Sequence](#simple-sequence)
-  * [Error handling](#error-handling)
-  * [Deferred Error handling](#deferred-error-handling)
+    + [Error handling](#error-handling)
+    + [Deferred Error handling](#deferred-error-handling)
     + [Panic handling](#panic-handling)
     + [Context handling](#context-handling)
     + [Logging with logrus](#logging-with-logrus)
-  * [Acknowledgements](#acknowledgements)
+- [Acknowledgements](#acknowledgements)
 
 
 ## Features
@@ -103,7 +103,7 @@ func main() {
 }
 ```
 
-## Error handling
+### Error handling
 
 ```go
 import (
@@ -160,7 +160,7 @@ func myHandler(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-## Deferred Error handling
+### Deferred Error handling
 
 ```go
 import (
